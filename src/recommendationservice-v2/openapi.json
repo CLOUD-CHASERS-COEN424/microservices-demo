@@ -47,6 +47,40 @@
         }
       }
     },
+    "/api/v1/users/{user_id}": {
+      "get": {
+        "tags": [
+          "NoSQL Session Data Model"
+        ],
+        "summary": "Get User Session Profile",
+        "description": "Inspect a shopper's session profile and AI agent context stored in Cloud Firestore NoSQL.",
+        "operationId": "get_user_session_profile_api_v1_users__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get User Session Profile Api V1 Users  User Id  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/health": {
       "get": {
         "tags": [
@@ -65,10 +99,144 @@
           }
         }
       }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "Monitoring & Canary"
+        ],
+        "summary": "Get Canary And Cost Metrics",
+        "description": "Returns real-time Availability, p95 Latency, Correctness %, Cost per Request (v1 vs v2), and Canary Promote/Rollback decision.",
+        "operationId": "get_canary_and_cost_metrics_api_v1_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Canary And Cost Metrics Api V1 Metrics Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fault": {
+      "post": {
+        "tags": [
+          "Monitoring & Canary"
+        ],
+        "summary": "Configure Fault Injection",
+        "description": "Configure fault injection at runtime to demonstrate canary rollback during live demo.",
+        "operationId": "configure_fault_injection_api_v1_fault_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FaultConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Configure Fault Injection Api V1 Fault Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "Monitoring & Canary"
+        ],
+        "summary": "Prometheus Metrics",
+        "description": "Prometheus scrape endpoint for Grafana / Cloud Monitoring dashboards.",
+        "operationId": "prometheus_metrics_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain; version=0.0.4; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "FaultConfigRequest": {
+        "properties": {
+          "error_rate": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Rate",
+            "description": "Probability (0.0-1.0) of simulated failure for canary rollback demo"
+          },
+          "extra_latency_ms": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Latency Ms",
+            "description": "Artificial latency (ms) injected into each request"
+          },
+          "corrupt_output": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrupt Output",
+            "description": "If true, injects an invalid SKU to trigger a correctness threshold rollback"
+          }
+        },
+        "type": "object",
+        "title": "FaultConfigRequest"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
