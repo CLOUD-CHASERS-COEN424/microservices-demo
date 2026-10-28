@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "http://localhost:8081",
-      "description": "Local RecommendationService v2 Server (use Browser routing or replace with ngrok HTTPS URL for SwaggerHub Cloud Proxy)"
+      "description": "Local RecommendationService v2 Server"
     }
   ],
   "paths": {
@@ -57,7 +57,7 @@
                   "served_by_version": "v2-ai-agent",
                   "reasoning_summary": "Queried Firestore profile for 'user-concordia-99' and inspected cart items via ProductCatalogService; selected complementary fashion and lifestyle bundle.",
                   "tokens_used": 415,
-                  "estimated_cost_usd": 0.0001185,
+                  "estimated_cost_usd": 0.0,
                   "latency_ms": 412.5
                 }
               }
@@ -105,12 +105,11 @@
                 },
                 "example": {
                   "user_id": "user-concordia-99",
-                  "category_affinity": "accessories, clothing & summer fashion",
+                  "category_affinity": "vintage photography & retro electronics",
                   "past_purchased_skus": [
                     "OLJCESPC7Z"
                   ],
                   "price_sensitivity": "medium",
-                  "interaction_count": 2,
                   "last_recommended_skus": [
                     "1YMWWN1N4O",
                     "L9ECAV7KIM",
@@ -129,7 +128,7 @@
     "/api/v1/health": {
       "get": {
         "tags": [
-          "Monitoring & Canary"
+          "Health"
         ],
         "summary": "Health Check",
         "operationId": "health_check_api_v1_health_get",
@@ -152,147 +151,10 @@
           }
         }
       }
-    },
-    "/api/v1/metrics": {
-      "get": {
-        "tags": [
-          "Monitoring & Canary"
-        ],
-        "summary": "Get Canary And Cost Metrics",
-        "description": "Returns real-time Availability, p95 Latency, Correctness %, Cost per Request (v1 vs v2), and Canary Promote/Rollback decision.",
-        "operationId": "get_canary_and_cost_metrics_api_v1_metrics_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "service": "recommendationservice",
-                  "version": "v2-ai-agent",
-                  "metrics": {
-                    "total_requests": 40,
-                    "failed_requests": 0,
-                    "error_rate_pct": 0.0,
-                    "availability_pct": 100.0,
-                    "p95_latency_ms": 485.2,
-                    "correctness_pct": 100.0
-                  },
-                  "cost_monitoring": {
-                    "total_tokens": 16600,
-                    "v2_total_cost_per_req_usd": 0.0001215,
-                    "v1_baseline_cost_per_req_usd": 0.0000012,
-                    "monthly_budget_usd": 50.0
-                  },
-                  "canary_evaluation": {
-                    "decision": "PROMOTE",
-                    "violations": []
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/fault": {
-      "post": {
-        "tags": [
-          "Monitoring & Canary"
-        ],
-        "summary": "Configure Fault Injection",
-        "description": "Configure fault injection at runtime to demonstrate canary rollback during live demo.",
-        "operationId": "configure_fault_injection_api_v1_fault_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FaultConfigRequest"
-              },
-              "example": {
-                "error_rate": 0.0,
-                "extra_latency_ms": 0.0,
-                "corrupt_output": false
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                },
-                "example": {
-                  "status": "updated",
-                  "fault_injection": {
-                    "fault_error_rate": 0.0,
-                    "fault_extra_latency_ms": 0.0,
-                    "fault_corrupt_output": false
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/metrics": {
-      "get": {
-        "tags": [
-          "Monitoring & Canary"
-        ],
-        "summary": "Prometheus Metrics",
-        "description": "Prometheus scrape endpoint for Grafana / Cloud Monitoring dashboards.",
-        "operationId": "prometheus_metrics_metrics_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": "recommendation_v2_requests_total 40\nrecommendation_v2_p95_latency_ms 485.2\n"
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "FaultConfigRequest": {
-        "type": "object",
-        "title": "FaultConfigRequest",
-        "properties": {
-          "error_rate": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 0.0,
-            "maximum": 1.0,
-            "description": "Probability (0.0-1.0) of simulated failure for canary rollback demo"
-          },
-          "extra_latency_ms": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 0.0,
-            "maximum": 10000.0,
-            "description": "Artificial latency (ms) injected into each request"
-          },
-          "corrupt_output": {
-            "type": "boolean",
-            "nullable": true,
-            "description": "If true, injects an invalid SKU to trigger a correctness threshold rollback"
-          }
-        }
-      },
       "HTTPValidationError": {
         "type": "object",
         "title": "HTTPValidationError",
@@ -381,7 +243,7 @@
           },
           "estimated_cost_usd": {
             "type": "number",
-            "example": 0.0001185
+            "example": 0.0
           },
           "latency_ms": {
             "type": "number",
