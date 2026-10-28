@@ -1,0 +1,16 @@
+# Dependencies for RecommendationService v2 (gRPC + Gemini AI Agent + Cloud Firestore + FastAPI + Prometheus)
+google-api-core>=2.20.0
+google-cloud-firestore>=2.19.0
+google-genai>=1.0.0
+grpcio>=1.68.0
+grpcio-health-checking>=1.68.0
+protobuf>=5.28.0
+python-json-logger>=3.2.0
+fastapi>=0.115.0
+uvicorn>=0.32.0
+pydantic>=2.9.0
+prometheus-client>=0.21.0
+requests>=2.32.0
+opentelemetry-distro>=0.48b0
+opentelemetry-instrumentation-grpc>=0.48b0
+opentelemetry-exporter-otlp-proto-grpc>=1.27.0
