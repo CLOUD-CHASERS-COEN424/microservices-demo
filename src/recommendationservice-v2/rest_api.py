@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Response
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Optional
 import time
@@ -8,8 +9,19 @@ from metrics import tracker, CONTENT_TYPE_LATEST
 
 app = FastAPI(
     title="RecEngine-AI: Autonomous Cross-Sell & Bundling SaaS API",
-    description="B2B AI Agent API (Option B - COEN 424). Provides context-aware product recommendations via Gemini tool-calling and Cloud Firestore NoSQL.",
+    description="B2B AI Agent API (Option B - COEN 424). Provides context-aware product recommendations via NVIDIA Nemotron 3.5 Lightning (OpenRouter) tool-calling and Cloud Firestore NoSQL.",
     version="2.0.0",
+    servers=[
+        {"url": "http://localhost:8081", "description": "Local RecommendationService v2 Server"},
+    ],
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
