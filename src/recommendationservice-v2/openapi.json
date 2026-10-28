@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
     "title": "RecEngine-AI: Autonomous Cross-Sell & Bundling SaaS API",
     "description": "B2B AI Agent API (Option B - COEN 424). Provides context-aware product recommendations via NVIDIA Nemotron 3.5 Lightning (OpenRouter) tool-calling and Cloud Firestore NoSQL.",
@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "http://localhost:8081",
-      "description": "Local RecommendationService v2 Server"
+      "description": "Local RecommendationService v2 Server (use Browser routing or replace with ngrok HTTPS URL for SwaggerHub Cloud Proxy)"
     }
   ],
   "paths": {
@@ -20,14 +20,22 @@
         "summary": "Generate Recommendations",
         "operationId": "generate_recommendations_api_v1_recommendations_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/RecommendationRequest"
+              },
+              "example": {
+                "user_id": "user-concordia-99",
+                "product_ids": [
+                  "OLJCESPC7Z",
+                  "66VCHSJNUP"
+                ],
+                "max_results": 5
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -36,6 +44,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RecommendationResponse"
+                },
+                "example": {
+                  "user_id": "user-concordia-99",
+                  "recommended_product_ids": [
+                    "1YMWWN1N4O",
+                    "L9ECAV7KIM",
+                    "2ZYFJ3GM2N",
+                    "0PUK6V6EV0",
+                    "LS4PSXUNUM"
+                  ],
+                  "served_by_version": "v2-ai-agent",
+                  "reasoning_summary": "Queried Firestore profile for 'user-concordia-99' and inspected cart items via ProductCatalogService; selected complementary fashion and lifestyle bundle.",
+                  "tokens_used": 415,
+                  "estimated_cost_usd": 0.0001185,
+                  "latency_ms": 412.5
                 }
               }
             }
@@ -68,7 +91,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "title": "User Id"
+              "example": "user-concordia-99"
             }
           }
         ],
@@ -78,8 +101,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "title": "Response Get User Session Profile Api V1 Users  User Id  Get"
+                  "type": "object"
+                },
+                "example": {
+                  "user_id": "user-concordia-99",
+                  "category_affinity": "accessories, clothing & summer fashion",
+                  "past_purchased_skus": [
+                    "OLJCESPC7Z"
+                  ],
+                  "price_sensitivity": "medium",
+                  "interaction_count": 2,
+                  "last_recommended_skus": [
+                    "1YMWWN1N4O",
+                    "L9ECAV7KIM",
+                    "2ZYFJ3GM2N",
+                    "0PUK6V6EV0",
+                    "LS4PSXUNUM"
+                  ],
+                  "nosql_source": "cloud-firestore"
                 }
               }
             }
@@ -99,7 +138,15 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "SERVING",
+                  "version": "v2-ai-agent",
+                  "nosql_connected": true,
+                  "nosql_backend": "cloud-firestore"
+                }
               }
             }
           }
@@ -120,8 +167,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "title": "Response Get Canary And Cost Metrics Api V1 Metrics Get"
+                  "type": "object"
+                },
+                "example": {
+                  "service": "recommendationservice",
+                  "version": "v2-ai-agent",
+                  "metrics": {
+                    "total_requests": 40,
+                    "failed_requests": 0,
+                    "error_rate_pct": 0.0,
+                    "availability_pct": 100.0,
+                    "p95_latency_ms": 485.2,
+                    "correctness_pct": 100.0
+                  },
+                  "cost_monitoring": {
+                    "total_tokens": 16600,
+                    "v2_total_cost_per_req_usd": 0.0001215,
+                    "v1_baseline_cost_per_req_usd": 0.0000012,
+                    "monthly_budget_usd": 50.0
+                  },
+                  "canary_evaluation": {
+                    "decision": "PROMOTE",
+                    "violations": []
+                  }
                 }
               }
             }
@@ -138,14 +206,19 @@
         "description": "Configure fault injection at runtime to demonstrate canary rollback during live demo.",
         "operationId": "configure_fault_injection_api_v1_fault_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/FaultConfigRequest"
+              },
+              "example": {
+                "error_rate": 0.0,
+                "extra_latency_ms": 0.0,
+                "corrupt_output": false
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -153,18 +226,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "title": "Response Configure Fault Injection Api V1 Fault Post"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "type": "object"
+                },
+                "example": {
+                  "status": "updated",
+                  "fault_injection": {
+                    "fault_error_rate": 0.0,
+                    "fault_extra_latency_ms": 0.0,
+                    "fault_corrupt_output": false
+                  }
                 }
               }
             }
@@ -184,10 +254,11 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "text/plain; version=0.0.4; charset=utf-8": {
+              "text/plain": {
                 "schema": {
                   "type": "string"
-                }
+                },
+                "example": "recommendation_v2_requests_total 40\nrecommendation_v2_p95_latency_ms 485.2\n"
               }
             }
           }
@@ -198,78 +269,60 @@
   "components": {
     "schemas": {
       "FaultConfigRequest": {
+        "type": "object",
+        "title": "FaultConfigRequest",
         "properties": {
           "error_rate": {
-            "anyOf": [
-              {
-                "type": "number",
-                "maximum": 1.0,
-                "minimum": 0.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Error Rate",
+            "type": "number",
+            "nullable": true,
+            "minimum": 0.0,
+            "maximum": 1.0,
             "description": "Probability (0.0-1.0) of simulated failure for canary rollback demo"
           },
           "extra_latency_ms": {
-            "anyOf": [
-              {
-                "type": "number",
-                "maximum": 10000.0,
-                "minimum": 0.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Extra Latency Ms",
+            "type": "number",
+            "nullable": true,
+            "minimum": 0.0,
+            "maximum": 10000.0,
             "description": "Artificial latency (ms) injected into each request"
           },
           "corrupt_output": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Corrupt Output",
+            "type": "boolean",
+            "nullable": true,
             "description": "If true, injects an invalid SKU to trigger a correctness threshold rollback"
           }
-        },
-        "type": "object",
-        "title": "FaultConfigRequest"
+        }
       },
       "HTTPValidationError": {
+        "type": "object",
+        "title": "HTTPValidationError",
         "properties": {
           "detail": {
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
-            "title": "Detail"
+            }
           }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
+        }
       },
       "RecommendationRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "product_ids"
+        ],
+        "title": "RecommendationRequest",
         "properties": {
           "user_id": {
             "type": "string",
-            "title": "User Id",
             "description": "Unique shopper ID for Firestore session lookup",
             "example": "user-concordia-99"
           },
           "product_ids": {
+            "type": "array",
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "title": "Product Ids",
             "description": "List of SKU IDs currently in the user's cart",
             "example": [
               "OLJCESPC7Z",
@@ -278,58 +331,13 @@
           },
           "max_results": {
             "type": "integer",
-            "maximum": 10.0,
-            "minimum": 1.0,
-            "title": "Max Results",
+            "minimum": 1,
+            "maximum": 10,
             "default": 5
           }
-        },
-        "type": "object",
-        "required": [
-          "user_id",
-          "product_ids"
-        ],
-        "title": "RecommendationRequest"
+        }
       },
       "RecommendationResponse": {
-        "properties": {
-          "user_id": {
-            "type": "string",
-            "title": "User Id"
-          },
-          "recommended_product_ids": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Recommended Product Ids"
-          },
-          "served_by_version": {
-            "type": "string",
-            "title": "Served By Version",
-            "example": "v2-ai-agent"
-          },
-          "reasoning_summary": {
-            "type": "string",
-            "title": "Reasoning Summary",
-            "example": "Selected vintage camera lens and tripod based on vintage camera in cart."
-          },
-          "tokens_used": {
-            "type": "integer",
-            "title": "Tokens Used",
-            "example": 340
-          },
-          "estimated_cost_usd": {
-            "type": "number",
-            "title": "Estimated Cost Usd",
-            "example": 5.1e-05
-          },
-          "latency_ms": {
-            "type": "number",
-            "title": "Latency Ms",
-            "example": 412.5
-          }
-        },
         "type": "object",
         "required": [
           "user_id",
@@ -340,47 +348,69 @@
           "estimated_cost_usd",
           "latency_ms"
         ],
-        "title": "RecommendationResponse"
+        "title": "RecommendationResponse",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "user-concordia-99"
+          },
+          "recommended_product_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "1YMWWN1N4O",
+              "L9ECAV7KIM",
+              "2ZYFJ3GM2N",
+              "0PUK6V6EV0",
+              "LS4PSXUNUM"
+            ]
+          },
+          "served_by_version": {
+            "type": "string",
+            "example": "v2-ai-agent"
+          },
+          "reasoning_summary": {
+            "type": "string",
+            "example": "Selected complementary fashion and lifestyle products via NVIDIA Nemotron 3.5 Lightning."
+          },
+          "tokens_used": {
+            "type": "integer",
+            "example": 415
+          },
+          "estimated_cost_usd": {
+            "type": "number",
+            "example": 0.0001185
+          },
+          "latency_ms": {
+            "type": "number",
+            "example": 412.5
+          }
+        }
       },
       "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
-          }
-        },
         "type": "object",
         "required": [
           "loc",
           "msg",
           "type"
         ],
-        "title": "ValidationError"
+        "title": "ValidationError",
+        "properties": {
+          "loc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "msg": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
       }
     }
   }
