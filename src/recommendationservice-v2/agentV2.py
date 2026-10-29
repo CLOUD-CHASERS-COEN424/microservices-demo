@@ -1,7 +1,7 @@
 """
 RecommendationService v2 — Clean AI Agent (agentV2.py)
 Model: NVIDIA Nemotron 3.5 Lightning (free) (`nvidia/nemotron-3.5-lightning:free`)
-via OpenRouter API with tool calling and Cloud Firestore (`cloudchasersdb`).
+via OpenRouter API with tool calling, Cloud Firestore (`cloudchasersdb`), and `products_extended.json`.
 """
 
 import copy
@@ -43,86 +43,68 @@ OPENROUTER_API_URL = os.environ.get(
 )
 DEFAULT_OPENROUTER_MODEL = "nvidia/nemotron-3.5-lightning:free"
 
-# Default product catalog matching src/productcatalogservice/products.json
-DEFAULT_CATALOG_PRODUCTS: List[Dict[str, Any]] = [
-    {
-        "id": "OLJCESPC7Z",
-        "name": "Sunglasses",
-        "description": "Add a modern touch to your outfits with these sleek aviator sunglasses.",
-        "categories": ["accessories"],
-        "price_usd": 19.99,
-    },
-    {
-        "id": "66VCHSJNUP",
-        "name": "Tank Top",
-        "description": "Perfectly cropped cotton tank, with a scooped neckline.",
-        "categories": ["clothing", "tops"],
-        "price_usd": 18.99,
-    },
-    {
-        "id": "1YMWWN1N4O",
-        "name": "Watch",
-        "description": "This gold-tone stainless steel watch will work with most of your outfits.",
-        "categories": ["accessories"],
-        "price_usd": 109.99,
-    },
-    {
-        "id": "L9ECAV7KIM",
-        "name": "Loafers",
-        "description": "A neat addition to your summer wardrobe.",
-        "categories": ["footwear"],
-        "price_usd": 89.99,
-    },
-    {
-        "id": "2ZYFJ3GM2N",
-        "name": "Hairdryer",
-        "description": "This lightweight hairdryer has 3 heat and speed settings. It's perfect for travel.",
-        "categories": ["hair", "beauty"],
-        "price_usd": 24.99,
-    },
-    {
-        "id": "0PUK6V6EV0",
-        "name": "Candle Holder",
-        "description": "This small but intricate candle holder is an excellent gift.",
-        "categories": ["decor", "home"],
-        "price_usd": 18.99,
-    },
-    {
-        "id": "LS4PSXUNUM",
-        "name": "Salt & Pepper Shakers",
-        "description": "Add some flavor to your kitchen.",
-        "categories": ["kitchen"],
-        "price_usd": 18.49,
-    },
-    {
-        "id": "9SIQT8TOJO",
-        "name": "Bamboo Glass Jar",
-        "description": "This bamboo glass jar can hold 57 oz (1.7 l) and is perfect for any kitchen.",
-        "categories": ["kitchen"],
-        "price_usd": 5.49,
-    },
-    {
-        "id": "6E92ZMYYFZ",
-        "name": "Mug",
-        "description": "A simple mug with a mustard interior.",
-        "categories": ["kitchen"],
-        "price_usd": 8.99,
-    },
-]
+
+def _load_extended_catalog() -> List[Dict[str, Any]]:
+    """Loads the 44-product catalog from products_extended.json in this directory."""
+    extended_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "products_extended.json"
+    )
+    if os.path.exists(extended_path):
+        try:
+            with open(extended_path, "r", encoding="utf-8") as f:
+                raw_data = json.load(f)
+            products = []
+            for p in raw_data.get("products", []):
+                price_obj = p.get("priceUsd", {})
+                units = float(price_obj.get("units", 0))
+                nanos = float(price_obj.get("nanos", 0)) / 1e9
+                price_usd = round(units + nanos, 2) if price_obj else float(p.get("price_usd", 0.0))
+                products.append(
+                    {
+                        "id": p["id"],
+                        "name": p["name"],
+                        "description": p.get("description", ""),
+                        "categories": list(p.get("categories", [])),
+                        "price_usd": price_usd,
+                    }
+                )
+            if products:
+                logger.info(f"Loaded {len(products)} products from products_extended.json")
+                return products
+        except Exception as exc:
+            logger.warning(f"Failed to load products_extended.json: {exc}")
+    return []
+
+
+DEFAULT_CATALOG_PRODUCTS: List[Dict[str, Any]] = _load_extended_catalog()
 
 IN_MEMORY_NOSQL_STORE: Dict[str, Dict[str, Any]] = {
     "user-concordia-99": {
         "user_id": "user-concordia-99",
-        "category_affinity": "vintage photography & retro electronics",
-        "past_purchased_skus": ["OLJCESPC7Z"],
+        "category_affinity": "vintage photography, travel & portable electronics",
+        "past_purchased_skus": ["OLJCESPC7Z", "CAMERA001"],
         "price_sensitivity": "medium",
         "updated_at": datetime.now(timezone.utc).isoformat(),
     },
     "user-kitchen-pro": {
         "user_id": "user-kitchen-pro",
-        "category_affinity": "home barista, coffee & kitchenware",
-        "past_purchased_skus": ["6E92ZMYYFZ", "2ZYFJ3GM2N"],
+        "category_affinity": "home barista, specialty coffee & kitchenware",
+        "past_purchased_skus": ["6E92ZMYYFZ", "KITCH001"],
         "price_sensitivity": "low",
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    },
+    "user-beauty-traveler": {
+        "user_id": "user-beauty-traveler",
+        "category_affinity": "hair styling, beauty & compact travel accessories",
+        "past_purchased_skus": ["2ZYFJ3GM2N"],
+        "price_sensitivity": "medium",
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    },
+    "user-summer-runner": {
+        "user_id": "user-summer-runner",
+        "category_affinity": "running, outdoor fitness, eyewear & summer sportswear",
+        "past_purchased_skus": ["66VCHSJNUP"],
+        "price_sensitivity": "high",
         "updated_at": datetime.now(timezone.utc).isoformat(),
     },
 }
@@ -229,7 +211,7 @@ class FirestoreNoSQLStore:
 
 
 class CatalogBackendClient:
-    """Queries Online Boutique ProductCatalogService over gRPC."""
+    """Loads products from products_extended.json (and merges any live gRPC catalog products)."""
 
     def __init__(self, product_catalog_stub=None):
         self._stub = product_catalog_stub
@@ -261,58 +243,43 @@ class CatalogBackendClient:
         }
 
     def list_products(self) -> List[Dict[str, Any]]:
+        # Always include all 44 products from products_extended.json
+        by_id: Dict[str, Dict[str, Any]] = {
+            p["id"]: copy.deepcopy(p) for p in DEFAULT_CATALOG_PRODUCTS
+        }
         stub = self._get_stub()
         if stub is not None:
             try:
-                resp = stub.ListProducts(demo_pb2.Empty(), timeout=2.5)
+                resp = stub.ListProducts(demo_pb2.Empty(), timeout=2.0)
                 if resp and resp.products:
-                    return [self._proto_product_to_dict(p) for p in resp.products]
-            except Exception as exc:
-                logger.warning(f"gRPC ListProducts failed ({exc}); using local catalog.")
-        return copy.deepcopy(DEFAULT_CATALOG_PRODUCTS)
-
-    def get_product(self, product_id: str) -> Optional[Dict[str, Any]]:
-        stub = self._get_stub()
-        if stub is not None:
-            try:
-                resp = stub.GetProduct(
-                    demo_pb2.GetProductRequest(id=product_id), timeout=2.0
-                )
-                if resp and resp.id:
-                    return self._proto_product_to_dict(resp)
+                    for p in resp.products:
+                        d = self._proto_product_to_dict(p)
+                        by_id[d["id"]] = d
             except Exception:
                 pass
+        return list(by_id.values())
+
+    def get_product(self, product_id: str) -> Optional[Dict[str, Any]]:
         for p in self.list_products():
             if p["id"] == product_id:
                 return p
         return None
 
     def search_products(self, query: str) -> List[Dict[str, Any]]:
-        stub = self._get_stub()
-        if stub is not None:
-            try:
-                resp = stub.SearchProducts(
-                    demo_pb2.SearchProductsRequest(query=query), timeout=2.5
-                )
-                if resp and resp.results:
-                    return [self._proto_product_to_dict(p) for p in resp.results]
-            except Exception:
-                pass
         q = (query or "").strip().lower()
         all_prods = self.list_products()
         if not q:
             return all_prods
-        matched = [
-            p
-            for p in all_prods
-            if any(
-                token
-                in " ".join(
-                    [p["name"], p["description"]] + p.get("categories", [])
-                ).lower()
-                for token in q.replace(",", " ").split()
-            )
+        tokens = [
+            t for t in re.split(r"[\s,&/]+", q) if len(t) > 1
         ]
+        matched = []
+        for p in all_prods:
+            haystack = " ".join(
+                [p["name"], p["description"]] + p.get("categories", [])
+            ).lower()
+            if any(tok in haystack for tok in tokens):
+                matched.append(p)
         return matched if matched else all_prods
 
 
@@ -324,6 +291,7 @@ def check_nosql_health() -> Dict[str, Any]:
         "connected": nosql_store.is_connected(),
         "backend": nosql_store.backend_mode(),
         "collection": nosql_store.collection_name,
+        "catalog_size": len(DEFAULT_CATALOG_PRODUCTS),
     }
 
 
@@ -417,9 +385,7 @@ def _run_openrouter_nemotron_agent(
     """Executes NVIDIA Nemotron 3.5 Lightning via OpenRouter with tool calling."""
     api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("NVIDIA_API_KEY")
     if not api_key:
-        raise RuntimeError(
-            "OPENROUTER_API_KEY environment variable is not set."
-        )
+        raise RuntimeError("OPENROUTER_API_KEY environment variable is not set.")
 
     model_name = os.environ.get("OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL)
 
@@ -469,7 +435,7 @@ def _run_openrouter_nemotron_agent(
                     "properties": {
                         "query": {
                             "type": "string",
-                            "description": "Category or keyword search string.",
+                            "description": "Category or keyword search string (e.g. 'coffee kitchen', 'photography travel', 'hair beauty').",
                         }
                     },
                     "required": ["query"],
@@ -523,13 +489,14 @@ def _run_openrouter_nemotron_agent(
 
     system_instruction = (
         "You are RecEngine-AI, an autonomous e-commerce merchandising AI agent for Online Boutique. "
-        "Use the provided tools (`get_user_session_profile`, `get_cart_products_details`, "
-        "`list_all_catalog_products`, `search_catalog_products`) to inspect the shopper's Cloud Firestore "
-        "profile and the ProductCatalogService items. "
-        "Select up to `max_results` complementary product IDs from the catalog that are NOT already in `cart_product_ids`, "
-        "tailored to the shopper's cart items, category_affinity, and price_sensitivity.\n"
+        "To handle a recommendation request:\n"
+        "1. Call `get_user_session_profile` to retrieve the shopper's `category_affinity`, `past_purchased_skus`, and `price_sensitivity`.\n"
+        "2. Call `get_cart_products_details` to see the exact items and categories currently in the shopper's cart.\n"
+        "3. Call `search_catalog_products` or `list_all_catalog_products` to browse the 44-item product catalog.\n"
+        "4. Select exactly `max_results` highly relevant, complementary product IDs from the catalog that are NOT in `cart_product_ids`, "
+        "prioritizing items that directly complement the cart items and match the shopper's `category_affinity` and `price_sensitivity`.\n"
         "Respond ONLY with a valid JSON object matching this exact schema:\n"
-        '{"recommended_product_ids": ["SKU1", "SKU2"], "reasoning_summary": "Concise explanation of why these SKUs were chosen."}'
+        '{"recommended_product_ids": ["SKU1", "SKU2"], "reasoning_summary": "Concise explanation of why these specific SKUs complement the cart and user profile."}'
     )
 
     user_prompt = (
@@ -661,13 +628,26 @@ def _run_openrouter_nemotron_agent(
             messages.append({"role": "assistant", "content": content_text})
             break
 
-    # 4. Final JSON-only request without tools
+    # 4. Final JSON-only request without tools (ensuring profile, cart, and full catalog are in context)
+    if tool_calls_made == 0:
+        profile_ctx = execute_tool("get_user_session_profile", {"shopper_user_id": user_id})
+        cart_ctx = execute_tool("get_cart_products_details", {"sku_ids": cart_product_ids})
+        catalog_ctx = execute_tool("list_all_catalog_products", {})
+        extra_context = (
+            f"Shopper Profile: {json.dumps(profile_ctx)}\n"
+            f"Cart Items: {json.dumps(cart_ctx)}\n"
+            f"Catalog Products: {json.dumps(catalog_ctx)}\n\n"
+        )
+    else:
+        extra_context = ""
+
     messages.append(
         {
             "role": "user",
             "content": (
+                f"{extra_context}"
                 "FINAL RESPONSE REQUIRED. Do not call or describe any tools. "
-                f"Select up to {max_results} valid product IDs that are not in the cart "
+                f"Select up to {max_results} valid product IDs from the catalog that are NOT in the cart "
                 f"{json.dumps(list(cart_product_ids))}. "
                 "Return ONLY a valid JSON object in this exact format: "
                 '{"recommended_product_ids":["SKU1"],"reasoning_summary":"Brief explanation."}'
@@ -716,12 +696,16 @@ def run_ai_agent_recommendations(
     )
 
     all_products = catalog_client.list_products()
+    catalog_by_id = {p["id"]: p for p in all_products}
     final_ids = _filter_valid_skus(
         candidate_ids=agent_result["product_ids"],
         cart_product_ids=cart_product_ids,
         catalog_products=all_products,
         max_results=max_results,
     )
+    recommended_details = [
+        catalog_by_id[sku] for sku in final_ids if sku in catalog_by_id
+    ]
 
     nosql_store.update_user_session(
         user_id=user_id,
@@ -738,6 +722,7 @@ def run_ai_agent_recommendations(
 
     return {
         "product_ids": final_ids,
+        "recommended_products": recommended_details,
         "reasoning": agent_result["reasoning"],
         "tokens": agent_result["tokens"],
         "cost_usd": agent_result["cost_usd"],
