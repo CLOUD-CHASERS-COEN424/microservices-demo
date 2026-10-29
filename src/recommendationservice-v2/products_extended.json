@@ -1,0 +1,532 @@
+{
+  "products": [
+    {
+      "id": "OLJCESPC7Z",
+      "name": "Sunglasses",
+      "description": "Add a modern touch to your outfits with these sleek aviator sunglasses.",
+      "picture": "/static/img/products/sunglasses.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 19,
+        "nanos": 990000000
+      },
+      "categories": ["accessories"]
+    },
+    {
+      "id": "66VCHSJNUP",
+      "name": "Tank Top",
+      "description": "Perfectly cropped cotton tank, with a scooped neckline.",
+      "picture": "/static/img/products/tank-top.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 18,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "tops"]
+    },
+    {
+      "id": "1YMWWN1N4O",
+      "name": "Watch",
+      "description": "This gold-tone stainless steel watch will work with most of your outfits.",
+      "picture": "/static/img/products/watch.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 109,
+        "nanos": 990000000
+      },
+      "categories": ["accessories"]
+    },
+    {
+      "id": "L9ECAV7KIM",
+      "name": "Loafers",
+      "description": "A neat addition to your summer wardrobe.",
+      "picture": "/static/img/products/loafers.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 89,
+        "nanos": 990000000
+      },
+      "categories": ["footwear"]
+    },
+    {
+      "id": "2ZYFJ3GM2N",
+      "name": "Hairdryer",
+      "description": "This lightweight hairdryer has 3 heat and speed settings. It's perfect for travel.",
+      "picture": "/static/img/products/hairdryer.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 24,
+        "nanos": 990000000
+      },
+      "categories": ["hair", "beauty"]
+    },
+    {
+      "id": "0PUK6V6EV0",
+      "name": "Candle Holder",
+      "description": "This small but intricate candle holder is an excellent gift.",
+      "picture": "/static/img/products/candle-holder.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 18,
+        "nanos": 990000000
+      },
+      "categories": ["decor", "home"]
+    },
+    {
+      "id": "LS4PSXUNUM",
+      "name": "Salt & Pepper Shakers",
+      "description": "Add some flavor to your kitchen.",
+      "picture": "/static/img/products/salt-and-pepper-shakers.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 18,
+        "nanos": 490000000
+      },
+      "categories": ["kitchen"]
+    },
+    {
+      "id": "9SIQT8TOJO",
+      "name": "Bamboo Glass Jar",
+      "description": "This bamboo glass jar can hold 57 oz (1.7 l) and is perfect for any kitchen.",
+      "picture": "/static/img/products/bamboo-glass-jar.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 5,
+        "nanos": 490000000
+      },
+      "categories": ["kitchen"]
+    },
+    {
+      "id": "6E92ZMYYFZ",
+      "name": "Mug",
+      "description": "A simple mug with a mustard interior.",
+      "picture": "/static/img/products/mug.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 8,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen"]
+    },
+    {
+      "id": "SUNGLS001",
+      "name": "Round Sunglasses",
+      "description": "Round-frame sunglasses with UV protection, ideal for casual summer outfits and outdoor wear.",
+      "picture": "/static/img/products/round-sunglasses.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 16,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "eyewear"]
+    },
+    {
+      "id": "SUNGLS002",
+      "name": "Sport Sunglasses",
+      "description": "Lightweight wraparound sunglasses designed for running, hiking, and other outdoor activities.",
+      "picture": "/static/img/products/sport-sunglasses.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 29,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "eyewear", "sports"]
+    },
+    {
+      "id": "SUNGLS003",
+      "name": "Classic Black Sunglasses",
+      "description": "Classic black-frame sunglasses that pair easily with everyday and travel outfits.",
+      "picture": "/static/img/products/classic-sunglasses.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 21,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "eyewear"]
+    },
+    {
+      "id": "HAT000001",
+      "name": "Cotton Baseball Cap",
+      "description": "A breathable cotton baseball cap for sunny days; pairs well with casual clothing and sunglasses.",
+      "picture": "/static/img/products/baseball-cap.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 14,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "clothing", "headwear"]
+    },
+    {
+      "id": "BAG000001",
+      "name": "Canvas Tote Bag",
+      "description": "Reusable canvas tote for carrying everyday essentials, shopping, or beach items.",
+      "picture": "/static/img/products/canvas-tote.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 17,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "bags", "travel"]
+    },
+    {
+      "id": "WATCH0001",
+      "name": "Minimalist Silver Watch",
+      "description": "A slim silver-tone wristwatch with a clean dial for everyday outfits.",
+      "picture": "/static/img/products/silver-watch.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 79,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "watches"]
+    },
+    {
+      "id": "WATCH0002",
+      "name": "Sport Digital Watch",
+      "description": "A durable digital watch with stopwatch and timer features for active lifestyles.",
+      "picture": "/static/img/products/sport-watch.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 34,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "watches", "sports"]
+    },
+    {
+      "id": "BELT00001",
+      "name": "Brown Leather Belt",
+      "description": "A classic brown belt that complements loafers, trousers, and smart-casual clothing.",
+      "picture": "/static/img/products/brown-belt.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 24,
+        "nanos": 990000000
+      },
+      "categories": ["accessories", "clothing"]
+    },
+    {
+      "id": "SHOES001",
+      "name": "White Casual Sneakers",
+      "description": "Versatile white sneakers for daily walking and casual outfits.",
+      "picture": "/static/img/products/white-sneakers.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 54,
+        "nanos": 990000000
+      },
+      "categories": ["footwear", "clothing", "casual"]
+    },
+    {
+      "id": "SHOES002",
+      "name": "Leather Dress Shoes",
+      "description": "Polished leather dress shoes for formal occasions and business outfits.",
+      "picture": "/static/img/products/dress-shoes.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 99,
+        "nanos": 990000000
+      },
+      "categories": ["footwear", "formal"]
+    },
+    {
+      "id": "TOP000001",
+      "name": "Basic White T-Shirt",
+      "description": "A soft cotton crew-neck T-shirt that layers easily with a tank top, jacket, or casual shirt.",
+      "picture": "/static/img/products/white-tshirt.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 12,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "tops", "basics"]
+    },
+    {
+      "id": "TOP000002",
+      "name": "Striped Summer Shirt",
+      "description": "A lightweight short-sleeve striped shirt for warm weather and casual summer outfits.",
+      "picture": "/static/img/products/summer-shirt.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 27,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "tops", "summer"]
+    },
+    {
+      "id": "TOP000003",
+      "name": "Zip Hoodie",
+      "description": "A comfortable cotton-blend zip hoodie for layering in cool weather.",
+      "picture": "/static/img/products/zip-hoodie.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 39,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "tops", "outerwear"]
+    },
+    {
+      "id": "TOP000004",
+      "name": "Denim Shorts",
+      "description": "Casual denim shorts designed for warm-weather outfits.",
+      "picture": "/static/img/products/denim-shorts.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 32,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "bottoms", "summer"]
+    },
+    {
+      "id": "HAIR0001",
+      "name": "Travel Hairbrush",
+      "description": "A compact hairbrush that fits in a travel bag and complements a portable hairdryer.",
+      "picture": "/static/img/products/travel-hairbrush.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 7,
+        "nanos": 990000000
+      },
+      "categories": ["hair", "beauty", "travel"]
+    },
+    {
+      "id": "HAIR0002",
+      "name": "Ceramic Curling Iron",
+      "description": "A ceramic curling iron for styling hair at home or before events.",
+      "picture": "/static/img/products/curling-iron.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 32,
+        "nanos": 990000000
+      },
+      "categories": ["hair", "beauty", "styling"]
+    },
+    {
+      "id": "HAIR0003",
+      "name": "Heat Protectant Spray",
+      "description": "A lightweight heat-protectant spray for use before blow-drying or heat styling.",
+      "picture": "/static/img/products/heat-protectant.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 11,
+        "nanos": 990000000
+      },
+      "categories": ["hair", "beauty", "haircare"]
+    },
+    {
+      "id": "HOME00001",
+      "name": "Scented Soy Candle",
+      "description": "A scented soy candle for creating a warm atmosphere in a living room or bedroom.",
+      "picture": "/static/img/products/soy-candle.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 15,
+        "nanos": 990000000
+      },
+      "categories": ["home", "decor", "candles"]
+    },
+    {
+      "id": "HOME00002",
+      "name": "Ceramic Plant Pot",
+      "description": "A small ceramic planter for desks, shelves, and windowsills.",
+      "picture": "/static/img/products/plant-pot.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 13,
+        "nanos": 990000000
+      },
+      "categories": ["home", "decor", "plants"]
+    },
+    {
+      "id": "HOME00003",
+      "name": "Decorative Tray",
+      "description": "A decorative tray for organizing small items or displaying candles and accessories.",
+      "picture": "/static/img/products/decorative-tray.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 22,
+        "nanos": 990000000
+      },
+      "categories": ["home", "decor"]
+    },
+    {
+      "id": "KITCH001",
+      "name": "Pour-Over Coffee Dripper",
+      "description": "A reusable pour-over dripper for preparing filter coffee at home.",
+      "picture": "/static/img/products/coffee-dripper.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 16,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "coffee", "drinkware"]
+    },
+    {
+      "id": "KITCH002",
+      "name": "Coffee Bean Canister",
+      "description": "An airtight canister designed to store coffee beans and preserve freshness.",
+      "picture": "/static/img/products/coffee-canister.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 19,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "coffee", "storage"]
+    },
+    {
+      "id": "KITCH003",
+      "name": "Ceramic Coffee Cup Set",
+      "description": "A set of two ceramic cups for espresso or other hot drinks.",
+      "picture": "/static/img/products/coffee-cups.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 21,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "coffee", "drinkware"]
+    },
+    {
+      "id": "KITCH004",
+      "name": "Stainless Steel Travel Mug",
+      "description": "An insulated travel mug for carrying coffee or tea on a commute.",
+      "picture": "/static/img/products/travel-mug.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 24,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "coffee", "travel", "drinkware"]
+    },
+    {
+      "id": "KITCH005",
+      "name": "Digital Kitchen Scale",
+      "description": "A compact digital scale for accurately measuring ingredients while cooking or baking.",
+      "picture": "/static/img/products/kitchen-scale.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 18,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "cooking", "baking"]
+    },
+    {
+      "id": "KITCH006",
+      "name": "Glass Food Storage Set",
+      "description": "Reusable glass containers for storing leftovers, dry ingredients, and pantry items.",
+      "picture": "/static/img/products/food-storage.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 26,
+        "nanos": 990000000
+      },
+      "categories": ["kitchen", "storage"]
+    },
+    {
+      "id": "GIFT00001",
+      "name": "Gift Box Set",
+      "description": "A ready-to-give box with a mug, a small candle, and a greeting card.",
+      "picture": "/static/img/products/gift-box.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 29,
+        "nanos": 990000000
+      },
+      "categories": ["gifts", "home", "kitchen"]
+    },
+    {
+      "id": "TRAVEL001",
+      "name": "Compact Travel Organizer",
+      "description": "A zippered organizer for keeping chargers, toiletries, and small travel essentials together.",
+      "picture": "/static/img/products/travel-organizer.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 18,
+        "nanos": 990000000
+      },
+      "categories": ["travel", "accessories"]
+    },
+    {
+      "id": "ELEC0001",
+      "name": "Wireless Headphones",
+      "description": "Over-ear headphones for listening to music while commuting, studying, or traveling.",
+      "picture": "/static/img/products/headphones.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 59,
+        "nanos": 990000000
+      },
+      "categories": ["electronics", "audio", "travel"]
+    },
+    {
+      "id": "ELEC0002",
+      "name": "Portable Power Bank",
+      "description": "A compact power bank for charging phones and small devices while away from an outlet.",
+      "picture": "/static/img/products/power-bank.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 25,
+        "nanos": 990000000
+      },
+      "categories": ["electronics", "travel", "accessories"]
+    },
+    {
+      "id": "BOOK00001",
+      "name": "Travel Photography Guide",
+      "description": "A practical guide to taking better travel and street photographs, with tips on composition and light.",
+      "picture": "/static/img/products/photography-guide.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 19,
+        "nanos": 990000000
+      },
+      "categories": ["books", "photography", "travel"]
+    },
+    {
+      "id": "CAMERA001",
+      "name": "Compact Camera Strap",
+      "description": "An adjustable camera strap designed for comfortable carrying during travel and street photography.",
+      "picture": "/static/img/products/camera-strap.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 15,
+        "nanos": 990000000
+      },
+      "categories": ["photography", "accessories", "travel"]
+    },
+    {
+      "id": "PET000001",
+      "name": "Reusable Water Bottle",
+      "description": "A reusable bottle for staying hydrated at work, during workouts, or while traveling.",
+      "picture": "/static/img/products/water-bottle.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 12,
+        "nanos": 990000000
+      },
+      "categories": ["sports", "travel", "drinkware"]
+    },
+    {
+      "id": "SPORT001",
+      "name": "Running Waist Pack",
+      "description": "A lightweight waist pack for carrying keys and small essentials while running.",
+      "picture": "/static/img/products/running-pack.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 19,
+        "nanos": 990000000
+      },
+      "categories": ["sports", "accessories", "fitness"]
+    },
+    {
+      "id": "LUX000001",
+      "name": "Premium Cashmere Scarf",
+      "description": "A soft cashmere-blend scarf for layering with coats and smart-casual outfits.",
+      "picture": "/static/img/products/cashmere-scarf.jpg",
+      "priceUsd": {
+        "currencyCode": "USD",
+        "units": 89,
+        "nanos": 990000000
+      },
+      "categories": ["clothing", "accessories", "winter"]
+    }
+  ]
+}
