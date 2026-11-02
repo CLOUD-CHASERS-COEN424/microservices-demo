@@ -7,16 +7,14 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8081",
+      "url": "https://recommendationservice-v2-425932174785.northamerica-northeast1.run.app",
       "description": "Local RecommendationService v2 Server"
     }
   ],
   "paths": {
     "/api/v1/recommendations": {
       "post": {
-        "tags": [
-          "AI Merchandising Agent"
-        ],
+        "tags": ["AI Merchandising Agent"],
         "summary": "Generate Recommendations",
         "operationId": "generate_recommendations_api_v1_recommendations_post",
         "requestBody": {
@@ -28,10 +26,7 @@
               },
               "example": {
                 "user_id": "user-concordia-99",
-                "product_ids": [
-                  "OLJCESPC7Z",
-                  "66VCHSJNUP"
-                ],
+                "product_ids": ["OLJCESPC7Z", "66VCHSJNUP"],
                 "max_results": 5
               }
             }
@@ -78,9 +73,7 @@
     },
     "/api/v1/users/{user_id}": {
       "get": {
-        "tags": [
-          "NoSQL Session Data Model"
-        ],
+        "tags": ["NoSQL Session Data Model"],
         "summary": "Get User Session Profile",
         "description": "Inspect a shopper's session profile and AI agent context stored in Cloud Firestore NoSQL.",
         "operationId": "get_user_session_profile_api_v1_users__user_id__get",
@@ -106,9 +99,7 @@
                 "example": {
                   "user_id": "user-concordia-99",
                   "category_affinity": "vintage photography & retro electronics",
-                  "past_purchased_skus": [
-                    "OLJCESPC7Z"
-                  ],
+                  "past_purchased_skus": ["OLJCESPC7Z"],
                   "price_sensitivity": "medium",
                   "last_recommended_skus": [
                     "1YMWWN1N4O",
@@ -127,9 +118,7 @@
     },
     "/api/v1/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Health Check",
         "operationId": "health_check_api_v1_health_get",
         "responses": {
@@ -169,10 +158,7 @@
       },
       "RecommendationRequest": {
         "type": "object",
-        "required": [
-          "user_id",
-          "product_ids"
-        ],
+        "required": ["user_id", "product_ids"],
         "title": "RecommendationRequest",
         "properties": {
           "user_id": {
@@ -186,10 +172,7 @@
               "type": "string"
             },
             "description": "List of SKU IDs currently in the user's cart",
-            "example": [
-              "OLJCESPC7Z",
-              "66VCHSJNUP"
-            ]
+            "example": ["OLJCESPC7Z", "66VCHSJNUP"]
           },
           "max_results": {
             "type": "integer",
@@ -253,11 +236,7 @@
       },
       "ValidationError": {
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError",
         "properties": {
           "loc": {
